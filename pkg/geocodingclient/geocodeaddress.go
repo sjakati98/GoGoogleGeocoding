@@ -28,12 +28,23 @@ func (g GeocodingClient) GeocodeAddress(
 	logrus.Infof("validated geocode address request for request: %s", requestID)
 
 	// gather address
-	var formattedAddress string
-	formattedAddress = *request.AddressLine1 + ", " +
-		*request.AddressLine2 + ", " +
-		*request.City + ", " +
-		*request.State + ", " +
-		*request.Zipcode
+	formattedAddress := ""
+
+	if request.AddressLine1 != nil {
+		formattedAddress = formattedAddress + *request.AddressLine1 + ", "
+	}
+	if request.AddressLine2 != nil {
+		formattedAddress = formattedAddress + *request.AddressLine2 + ", "
+	}
+	if request.City != nil {
+		formattedAddress = formattedAddress + *request.City + ", "
+	}
+	if request.State != nil {
+		formattedAddress = formattedAddress + *request.State + ", "
+	}
+	if request.Zipcode != nil {
+		formattedAddress = formattedAddress + *request.Zipcode + ", "
+	}
 
 	// get request for geocoding service
 	req, err := g.getGeocodeRequest(formattedAddress)
